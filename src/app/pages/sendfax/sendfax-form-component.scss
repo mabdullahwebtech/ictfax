@@ -35,3 +35,28 @@ html, body { height: 100%; }
 .classcard {
   min-height: 18rem;
 }
+
+
+nb-card {
+  border-radius: 15px;
+  padding: 15px;
+}
+
+nb-card-header {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+input[type="datetime-local"] {
+  padding: 10px !important;
+  border-radius: 10px !important;
+}

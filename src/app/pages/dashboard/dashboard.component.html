@@ -1,26 +1,26 @@
 <h3 style="text-align:center">{{'Dashboard.MainHeading' | translate}}</h3><br>
 <div class="row">
 
-<div class="col-xxxl-6 col-md-6 clickable-card" (click)="cardClick('outfax')">
+<div class="col-xxxl-6 col-md-6" (click)="cardClick('outfax')">
   <ngx-status-card title="{{'Dashboard.outbound_fax' | translate}}" type="primary">
     <span style="font-size:30px">{{outfax_total}}</span>
   </ngx-status-card>
 </div>
 
-  <div class="col-xxxl-6 col-md-6 clickable-card" (click)="cardClick('infax')">
+  <div class="col-xxxl-6 col-md-6" (click)="cardClick('infax')">
     <ngx-status-card title="{{'Dashboard.inbound_fax' | translate}}" type="success">
       <span style="font-size:30px">{{infax_total}}</span>
     </ngx-status-card>
   </div>
 
 
-  <div class="col-xxxl-6 col-md-6 clickable-card" (click)="cardClick('dids')">
+  <div class="col-xxxl-6 col-md-6" (click)="cardClick('dids')">
     <ngx-status-card title="{{'Dashboard.dids' | translate}}" type="info">
         <span style="font-size:30px">{{did_total}}</span>
     </ngx-status-card>
   </div>
 
-  <div class="col-xxxl-6 col-md-6 clickable-card" (click)="cardClick('users')">
+  <div class="col-xxxl-6 col-md-6" (click)="cardClick('users')">
     <ngx-status-card title="{{'Dashboard.users' | translate}}" type="warning">
       <span style="font-size:30px">{{user_total}}</span>
     </ngx-status-card>

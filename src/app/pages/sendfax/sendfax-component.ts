@@ -26,7 +26,7 @@ export class FormsSendFaxComponent implements OnInit {
     private dataSourceBuilder: NbTreeGridDataSourceBuilder<SendFax>,
     private contact_service: ContactService, private http: Http,
     private app_service: AppService, private documnet_service:DocumentService) { }
-  
+
 
   aSendFax: SendFax[];
   SendFaxDataSource: NbTreeGridDataSource<SendFax>;
@@ -41,6 +41,8 @@ export class FormsSendFaxComponent implements OnInit {
   currentPage: number;
   total_pages: number;
   minimumItems: number;
+  isLoading: boolean = false;
+  isNoData: boolean = false;
   current_items: any[] = [];
 
   displayedColumns= ['transmission_id', 'phone', 'Timestamp', 'username','status', 'Operations'];
@@ -104,8 +106,46 @@ export class FormsSendFaxComponent implements OnInit {
     });
   }
 
-  async getFaxlist() {
-    this.sendfax_service.get_OutFaxTransmissionList().then(data => {
+
+
+
+
+
+  // async getFaxlist() {
+  //    this.isLoading = true;
+  //    this.isNoData = false;
+  //   this.sendfax_service.get_OutFaxTransmissionList()
+  //   .then(data => {
+  //     this.isLoading = false;
+
+  //     if (!data || data.length === 0) {
+  //       this.isNoData = true;
+  //       return;
+  //     }
+  //     this.aSendFax = data.sort((a, b) => b.transmission_id - a.transmission_id);
+  //     this.length = data.length;
+
+  //     data.forEach(element => {
+  //       if (element.contact_phone == null) {
+  //         element.contact_phone = 'N/A';
+  //       }
+  //     })
+  //     this.SendFaxDataSource = this.dataSourceBuilder.create(data.map(item => ({ data: item })),);
+  //   });
+  // }
+async getFaxlist() {
+  this.isLoading = true;
+  this.isNoData = false;
+
+  this.sendfax_service.get_OutFaxTransmissionList()
+    .then(data => {
+      this.isLoading = false;
+
+      if (!data || data.length === 0) {
+        this.isNoData = true;
+        return;
+      }
+
       this.aSendFax = data.sort((a, b) => b.transmission_id - a.transmission_id);
       this.length = data.length;
 
@@ -113,10 +153,22 @@ export class FormsSendFaxComponent implements OnInit {
         if (element.contact_phone == null) {
           element.contact_phone = 'N/A';
         }
-      })
-      this.SendFaxDataSource = this.dataSourceBuilder.create(data.map(item => ({ data: item })),);
+      });
+
+      this.SendFaxDataSource = this.dataSourceBuilder.create(
+        data.map(item => ({ data: item }))
+      );
+    })
+    .catch(err => {
+      console.error("API Error:", err);
+
+      // 🔥 VERY IMPORTANT
+      this.isLoading = false;
+      this.isNoData = true;
     });
-  }
+}
+
+
 
   private refreshData(): void {
     this.sendfax_service.get_OutFaxTransmissionList().then(data => {

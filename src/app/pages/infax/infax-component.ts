@@ -43,6 +43,8 @@ export class InFaxComponent implements OnInit {
   currentPage: number;
   total_pages: number;
   minimumItems: number;
+isLoading: boolean = false;
+isNoData: boolean = false;
   current_items: any[] = [];
   showSearchModal = false;
   filterValue: string = '';
@@ -55,6 +57,7 @@ export class InFaxComponent implements OnInit {
 
   ngOnInit() {
     this.getInFaxList();
+
   }
 
   openSearchModal() {
@@ -100,21 +103,61 @@ export class InFaxComponent implements OnInit {
   }
 
 
+
   getInFaxList() {
-    this.infax_service.get_InFaxTransmissionList().then(data => {
+  this.isLoading = true;
+  this.isNoData = false;    
+
+  this.infax_service.get_InFaxTransmissionList()
+    .then(data => {
+      this.isLoading = false;
+
+      if (!data || data.length === 0) {
+        this.isNoData = true;
+        return;
+      }
+
       this.aInFax = data
-        .filter(fax => fax.direction === 'inbound') 
+        .filter(fax => fax.direction === 'inbound')
         .sort((a, b) => b.transmission_id - a.transmission_id);
+
       this.length = this.aInFax.length;
+
       this.aInFax.forEach(element => {
         if (element.contact_phone == null) {
           element.contact_phone = 'N/A';
         }
       });
-     this.paginate(this.pageSize);
-      this.InFaxDataSource = this.dataSourceBuilder.create(this.current_items.map(item => ({ data: item })));
-    });    
-  }
+
+      this.paginate(this.pageSize);
+      this.InFaxDataSource = this.dataSourceBuilder.create(
+        this.current_items.map(item => ({ data: item }))
+      );
+    })
+    .catch(err => {
+      this.isLoading = false;
+      this.isNoData = true;
+    });
+}
+
+  // getInFaxList() {
+  //   this.isLoading = true;
+  //   this.isNoData = false;
+
+  //   this.infax_service.get_InFaxTransmissionList().then(data => {
+  //     this.aInFax = data
+  //       .filter(fax => fax.direction === 'inbound')
+  //       .sort((a, b) => b.transmission_id - a.transmission_id);
+  //     this.length = this.aInFax.length;
+  //     this.aInFax.forEach(element => {
+  //       if (element.contact_phone == null) {
+  //         element.contact_phone = 'N/A';
+  //       }
+  //     });
+  //    this.paginate(this.pageSize);
+  //     this.InFaxDataSource = this.dataSourceBuilder.create(this.current_items.map(item => ({ data: item })));
+  //   });
+  // }
 
   downloadDocument(transmission_id) {
     this.infax_service.getTransmissionResult(transmission_id).then(response =>  {
@@ -127,7 +170,7 @@ export class InFaxComponent implements OnInit {
     if (typeof page_Items === 'string') {
       if (page_Items === 'next') {
         if (this.startIndex + this.pageSize < this.length) {
-          this.startIndex += this.pageSize; 
+          this.startIndex += this.pageSize;
         }
       } else if (page_Items === 'previous') {
         if (this.startIndex > 0) {
@@ -136,14 +179,14 @@ export class InFaxComponent implements OnInit {
       }
     } else {
       this.pageSize = page_Items;
-      this.startIndex = 0; 
+      this.startIndex = 0;
     }
     this.currentPage = Math.floor(this.startIndex / this.pageSize) + 1;
     this.total_pages = Math.ceil(this.length / this.pageSize);
-    this.minimumItems = Math.min(this.startIndex + this.pageSize, this.length);    
-    
+    this.minimumItems = Math.min(this.startIndex + this.pageSize, this.length);
+
     const end = Math.min(this.startIndex + this.pageSize, this.length);
-    this.current_items = this.aInFax.slice(this.startIndex, end); 
+    this.current_items = this.aInFax.slice(this.startIndex, end);
     this.InFaxDataSource = this.dataSourceBuilder.create(this.current_items.map(item => ({ data: item })));
   }
 

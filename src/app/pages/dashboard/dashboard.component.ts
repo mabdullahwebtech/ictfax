@@ -230,10 +230,7 @@ loadFaxStats() {
         this.periodsMeta = data.periods_meta;
 
 
-        if (this.periodsMeta.length > 0) {
-          const firstPeriodKey = this.periodsMeta[0].key;
-          this.loadFaxDetails(firstPeriodKey);
-        }
+        
       }
     },
     error: (err) => console.error('Error loading fax stats:', err),
@@ -321,20 +318,20 @@ renderFaxChart(data: any) {
 }
 
 
-loadFaxDetails(periodKey: string) {
-  this.dashboard_service.getFaxDetails(periodKey).subscribe({
-    next: (details) => {
-      if (details.success) {
-        console.log('Fax details for period', periodKey, details.rows);
+// loadFaxDetails(periodKey: string) {
+//   this.dashboard_service.getFaxDetails(periodKey).subscribe({
+//     next: (details) => {
+//       if (details.success) {
+//         console.log('Fax details for period', periodKey, details.rows);
 
-        this.faxDetails = details.rows;
-      } else {
-        console.error('Error fetching fax details:', details.error);
-      }
-    },
-    error: (err) => console.error('Error loading fax details:', err),
-  });
-}
+//         this.faxDetails = details.rows;
+//       } else {
+//         console.error('Error fetching fax details:', details.error);
+//       }
+//     },
+//     error: (err) => console.error('Error loading fax details:', err),
+//   });
+// }
 
   changeRange(range: string) {
     this.selectedRange = range;

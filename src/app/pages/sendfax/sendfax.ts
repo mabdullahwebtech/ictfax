@@ -19,7 +19,7 @@ export class SendFax {
   result: any;
   last_run: any;
   scheduled?: boolean;
-  scheduled_time?: string; // 2025-12-01T10:52
+  scheduled_time?: string; 
   contact: {
   phone:any;
   }

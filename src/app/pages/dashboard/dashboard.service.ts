@@ -41,7 +41,7 @@ getAllServersHealth(): Promise<any> {
   const headers = new Headers();
   this.app_service.createAuthorizationHeader(headers);
   const options = new RequestOptions({ headers });
-  const url = `${this.app_service.apiUrlSystem}/cpuhealth`; // all servers
+  const url = `${this.app_service.apiUrlSystem}/cpuhealth`; 
   return this.http.get(url, options).toPromise()
     .then(res => res.json())
     .catch(err => this.app_service.handleError(err));
@@ -51,7 +51,7 @@ getServerHealth(node_id: number): Promise<any> {
   const headers = new Headers();
   this.app_service.createAuthorizationHeader(headers);
   const options = new RequestOptions({ headers });
-  const url = `${this.app_service.apiUrlSystem}/server/${node_id}/health/history`; // single server
+  const url = `${this.app_service.apiUrlSystem}/server/${node_id}/health/history`;
   return this.http.get(url, options).toPromise()
     .then(res => res.json())
     .catch(err => this.app_service.handleError(err));
@@ -61,7 +61,7 @@ checkAllServersHealth(): Promise<any> {
   const headers = new Headers();
   this.app_service.createAuthorizationHeader(headers);
   const options = new RequestOptions({ headers });
-  const url = `${this.app_service.apiUrlSystem}/health/check`; // POST request
+  const url = `${this.app_service.apiUrlSystem}/health/check`;
   return this.http.post(url, {}, options).toPromise()
     .then(res => res.json())
     .catch(err => this.app_service.handleError(err));
@@ -103,32 +103,8 @@ getFaxStats(range: string, start?: string, end?: string): Promise<any> {
       .catch(err => this.app_service.handleError(err));
   }
 
- 
-  getFaxDetails(
-    key: string,
-    status: string = 'all',
-    direction: string = 'all',
-    limit: number = 50,
-    offset: number = 0
-  ) {
-    const headers = new Headers();
-    this.app_service.createAuthorizationHeader(headers);
 
-    const params: any = {
-      key,
-      status,
-      direction,
-      limit,
-      offset
-    };
 
-    const options = new RequestOptions({ headers, params });
-    const url = `${this.app_service.apiUrlSystem}/kpi/fax-details`;
-
-    return this.http.get(url, options)
-      .map(res => res.json())
-      .catch(err => this.app_service.handleError(err));
-  }
 
 
 }
